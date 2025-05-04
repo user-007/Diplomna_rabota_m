@@ -1,0 +1,88 @@
+{{ header }}{{ column_left }}
+<div id="content">
+  <div class="page-header">
+    <div class="container-fluid">
+      <div class="float-end">
+      <a href="{{ mppollglobal }}" data-bs-toggle="tooltip" title="{{ button_mppollglobal }}" class="btn btn-info"><i class="fa fa-cogs"></i></a>
+        <a href="{{ add }}" data-bs-toggle="tooltip" title="{{ button_add }}" class="btn btn-primary"><i class="fa fa-plus"></i></a>
+        <button type="button" data-bs-toggle="tooltip" title="{{ button_delete }}" class="btn btn-danger" onclick="confirm('{{ text_confirm }}') ? $('#form-mppoll').submit() : false;"><i class="fa-regular fa-trash-can"></i></button>
+      </div>
+      <h1>{{ heading_title }}</h1>
+      <ol class="breadcrumb">
+        {% for breadcrumb in breadcrumbs %}
+          <li class="breadcrumb-item"><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+        {% endfor %}
+      </ol>
+    </div>
+  </div>
+  <div class="container-fluid">
+    {% if error_warning %}
+    <div class="alert alert-danger alert-dismissible"><i class="fa-solid fa-circle-exclamation"></i> {{ error_warning }}
+      <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    {% endif %}
+    {% if success %}
+    <div class="alert alert-success alert-dismissible"><i class="fa fa-check-circle"></i> {{ success }}
+      <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    {% endif %}
+    <div class="card">
+      <div class="card-header"><i class="fa fa-list"></i> {{ text_list }}</div>
+      <div class="card-body">
+        <form action="{{ delete }}" method="post" enctype="multipart/form-data" id="form-mppoll">
+          <div class="table-responsive">
+            <table class="table table-bordered table-hover">
+              <thead>
+                <tr>
+                  <td style="width: 1px;" class="text-center"><input type="checkbox" onclick="$('input[name*=\'selected\']').prop('checked', this.checked);" /></td>
+                  <td class="text-start">{% if sort == 'pd.question' %}
+                    <a href="{{ sort_question }}" class="<?php echo strtolower($order) }}">{{ column_question }}</a>
+                    {% else %}
+                    <a href="{{ sort_question }}">{{ column_question }}</a>
+                    {% endif %}</td>
+                  <td class="text-start">{% if sort == 'p.status' %}
+                    <a href="{{ sort_status }}" class="<?php echo strtolower($order) }}">{{ column_status }}</a>
+                    {% else %}
+                    <a href="{{ sort_status }}">{{ column_status }}</a>
+                    {% endif %}</td>
+                  <td class="text-start">{% if sort == 'p.date_added' %}
+                    <a href="{{ sort_date_added }}" class="<?php echo strtolower($order) }}">{{ column_date_added }}</a>
+                    {% else %}
+                    <a href="{{ sort_date_added }}">{{ column_date_added }}</a>
+                    {% endif %}</td>
+                  <td class="text-end">{{ column_action }}</td>
+                </tr>
+              </thead>
+              <tbody>
+                {% if mppolls %}
+                {% for mppoll in mppolls %}
+                <tr>
+                  <td class="text-center">{% if mppoll.mppoll_id in selected %}
+                    <input type="checkbox" name="selected[]" value="{{ mppoll.mppoll_id }}" checked="checked" />
+                    {% else %}
+                    <input type="checkbox" name="selected[]" value="{{ mppoll.mppoll_id }}" />
+                    {% endif %}</td>
+                  <td class="text-start">{{ mppoll.question }}</td>
+                  <td class="text-start">{{ mppoll.status }}</td>
+                  <td class="text-start">{{ mppoll.date_added }}</td>
+                  <td class="text-end"><a href="{{ mppoll.edit }}" data-bs-toggle="tooltip" title="{{ button_edit }}" class="btn btn-primary"><i class="fa-solid fa-pencil"></i></a></td>
+                </tr>
+                {% endfor %}
+                {% else %}
+                <tr>
+                  <td class="text-center" colspan="5">{{ text_no_results }}</td>
+                </tr>
+                {% endif %}
+              </tbody>
+            </table>
+          </div>
+        </form>
+        <div class="row">
+          <div class="col-sm-6 text-start">{{ pagination }}</div>
+          <div class="col-sm-6 text-end">{{ results }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{{ footer }}

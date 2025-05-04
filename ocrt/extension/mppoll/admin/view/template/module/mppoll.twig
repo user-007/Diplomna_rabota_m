@@ -1,0 +1,126 @@
+{{ header }}{{ column_left }}
+<div id="content">
+  <div class="page-header">
+    <div class="container-fluid">
+      <div class="float-end">
+        <button type="submit" form="form-mppoll" data-bs-toggle="tooltip" title="{{ button_save }}" class="btn btn-primary"><i class="fa-solid fa-floppy-disk"></i></button>
+        <a href="{{ cancel }}" data-bs-toggle="tooltip" title="{{ button_cancel }}" class="btn btn-light"><i class="fa-solid fa-reply"></i></a></div>
+      <h1>{{ heading_title }}</h1>
+      <ol class="breadcrumb">
+        {% for breadcrumb in breadcrumbs %}
+          <li class="breadcrumb-item"><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+        {% endfor %}
+      </ol>
+    </div>
+  </div>
+  <div class="container-fluid">
+    {% if error_warning %}
+    <div class="alert alert-danger alert-dismissible"><i class="fa-solid fa-circle-exclamation"></i> {{ error_warning }}
+      <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    {% endif %}
+    <div class="card">
+      <div class="card-header">
+        <h3 class="panel-title"><i class="fa-solid fa-pencil"></i> {{ text_edit }}</h3>
+      </div>
+      <div class="card-body">
+        <form action="{{ action }}" method="post" enctype="multipart/form-data" id="form-mppoll" class="form-horizontal">
+          <div class="row mb-3">
+            <label class="col-sm-2 col-form-label" for="input-name">{{ entry_name }}</label>
+            <div class="col-sm-10">
+              <input type="text" name="name" value="{{ name }}" placeholder="{{ entry_name }}" id="input-name" class="form-control" />
+              {% if error_name %}
+              <div class="text-danger">{{ error_name }}</div>
+              {% endif %}
+            </div>
+          </div>
+
+
+          <div class="row mb-3">
+            <label class="col-sm-2 col-form-label" for="input-status">{{ entry_status }}</label>
+            <div class="col-sm-10">
+              <select name="status" id="input-status" class="form-control">
+                {% if status %}
+                <option value="1" selected="selected">{{ text_enabled }}</option>
+                <option value="0">{{ text_disabled }}</option>
+                {% else %}
+                <option value="1">{{ text_enabled }}</option>
+                <option value="0" selected="selected">{{ text_disabled }}</option>
+                {% endif %}
+              </select>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <label class="col-sm-2 col-form-label" for="input-mppoll"><span data-bs-toggle="tooltip" title="{{ help_mppoll }}">{{ entry_mppoll }}</span></label>
+            <div class="col-sm-10">
+              <input type="text" name="mppoll_question" value="" placeholder="{{ entry_mppoll }}" id="input-mppoll" data-oc-target="autocomplete-name" autocomplete="off" class="form-control" />
+
+              {% if constant('VERSION') > '4.0.1.1' %}
+              <ul id="autocomplete-name" class="dropdown-menu"></ul>
+              {% else %}
+              <datalist id="list-name"></datalist>
+              {% endif %}
+
+              <div id="mppoll-mppoll" class="form-control" style="height: 150px; overflow: auto;">
+                {% for mppoll in mppolls %}
+                <div id="mppoll-mppoll{{ mppoll.mppoll_id }}"><i class="fa fa-minus-circle"></i> {{ mppoll.question }}
+                  <input type="hidden" name="mppoll[]" value="{{ mppoll.mppoll_id }}" />
+                </div>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+
+          <div class="tab-pane">
+            <ul class="nav nav-tabs" id="language">
+              {% for language in languages %}
+              <li class="nav-item"><a href="#language{{ language.language_id }}" data-bs-toggle="tab" class="nav-link{% if loop.first %} active{% endif %}"><img src="{{ language.image }}" title="{{ language.name }}" /> {{ language.name }}</a></li>
+              {% endfor %}
+            </ul>
+            <div class="tab-content">
+              {% for language in languages %}
+              <div class="tab-pane {% if loop.first %} active{% endif %}" id="language{{ language.language_id }}">
+                <div class="row mb-3">
+                  <label class="col-sm-2 col-form-label" for="input-title{{ language.language_id }}">{{ entry_title }}</label>
+                  <div class="col-sm-10">
+                    <input type="text" name="module_description[{{ language.language_id }}][title]" placeholder="{{ entry_title }}" id="input-heading{{ language.language_id }}" value="{{ (module_description[language.language_id].title) ? module_description[language.language_id].title : '' }}" class="form-control" />
+                  </div>
+                </div>                
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <script type="text/javascript"><!--
+$('input[name=\'mppoll_question\']').autocomplete({
+	source: function(request, response) {
+		$.ajax({
+			url: 'index.php?route=extension/mppoll/mppoll|autocomplete&user_token={{ user_token }}&filter_question=' +  encodeURIComponent(request),
+			dataType: 'json',
+			success: function(json) {
+				response($.map(json, function(item) {
+					return {
+						label: item['question'],
+						value: item['mppoll_id']
+					}
+				}));
+			}
+		});
+	},
+	select: function(item) {
+		$('input[name=\'mppoll_question\']').val('');
+		
+		$('#mppoll-mppoll' + item['value']).remove();
+		
+		$('#mppoll-mppoll').append('<div id="mppoll-mppoll' + item['value'] + '"><i class="fa fa-minus-circle"></i> ' + item['label'] + '<input type="hidden" name="mppoll[]" value="' + item['value'] + '" /></div>');
+	}
+});
+	
+$('#mppoll-mppoll').delegate('.fa-minus-circle', 'click', function() {
+	$(this).parent().remove();
+});
+//--></script></div>
+{{ footer }}

@@ -1,0 +1,67 @@
+ <div id="mppoll-result-{{ mppoll_id }}" class="mppoll-result col-sm-12" style="display: none;;">
+
+  <h2 class="text-center">{{ question }}</h2>
+  <div class="mb-3">
+    <ul class="list-group">
+      <li class="list-group-item list-group-heading">
+        <div class="row">
+          <div class="col-sm-6">{{ text_percent }}</div>
+          <div class="col-sm-6">{{ text_answer }}</div>
+        </div>
+      </li>
+      {% for answer_no, answer in answers %}
+      <li class="list-group-item">
+        <div class="row">
+          <div class="col-sm-6">{{ percent[ answer_no ] }}%</div>
+          <div class="col-sm-6">{{ answer }}</div>
+        </div>
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+  <div class="text-center">
+    <h3><b>{{ text_total_votes }}</b> {{ total_votes }}</h3>
+    <div class="buttons text-end mb-3">
+      <button data-id='{{ mppoll_id }}' onclick="MPPOLL.Removevoteresult(this);" class="btn btn-danger">{{ button_close }}</button>
+    </div>
+    <div class="chart-container">
+      <div id="chart-{{ mppoll_id }}" class="chart-holder"></div>
+    </div>
+  </div>
+  <style type="text/css">
+    #chart-{{ mppoll_id }} {
+      width: {{ chart_w }}px;
+      height: {{ chart_h }}px;
+      margin: 0 auto;
+    }
+  </style>
+  <script type="text/javascript">
+    $(function() {
+      var chart = $("#chart-{{ mppoll_id }}"), data = [], colors = [];
+
+      {% for key, answer in answers %}
+        data.push({ label: '{{ answer|e }}', data: [[1, parseFloat('{{ percent[ key ] }}') ]] })
+      {% endfor %}
+
+      chart.unbind();
+
+      {% for color in r_chartcolors %}
+        colors.push('#{{ color|e }}');
+      {% endfor %}
+
+      $.plot(chart, data, {
+        colors: colors,
+        series: {
+          pie: {
+            show: true
+          }
+        }
+      });
+
+      function labelFormatter(label, series) {
+        return "<div style='font-size:8pt; text-align:center; padding:2px; color:white;'>" + label + "<br/>" + Math.round(series.percent) + "%</div>";
+      }
+    });
+  </script>
+
+</div>

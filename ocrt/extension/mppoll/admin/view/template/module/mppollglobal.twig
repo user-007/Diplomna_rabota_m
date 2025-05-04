@@ -1,0 +1,304 @@
+{{ header }}{{ column_left }}
+<div id="content">
+  <div class="page-header">
+    <div class="container-fluid">
+      <div class="float-end">
+        <a href="{{ mppoll }}" data-bs-toggle="tooltip" title="{{ button_mppoll }}" class="btn btn-primary"><i class="fa fa-navicon"></i></a>
+        <button type="submit" form="form-mppollglobal" data-bs-toggle="tooltip" title="{{ button_save }}" class="btn btn-primary"><i class="fa-solid fa-floppy-disk"></i></button>
+        <a href="{{ cancel }}" data-bs-toggle="tooltip" title="{{ button_cancel }}" class="btn btn-light"><i class="fa-solid fa-reply"></i></a></div>
+      <h1>{{ heading_title }}</h1>
+      <ol class="breadcrumb">
+        {% for breadcrumb in breadcrumbs %}
+          <li class="breadcrumb-item"><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+        {% endfor %}
+      </ol>
+    </div>
+  </div>
+  <div class="container-fluid">
+    {% if info %}
+    <div class="alert alert-info"><i class="fa-solid fa-circle-exclamation"></i> {{ info }}</div>
+    {% endif %}
+    <div class="card">
+      <div class="card-header"><i class="fa-solid fa-pencil"></i> {{ text_form }}</div>
+      <div class="card-body">
+        <form id="form-mppollglobal" action="{{ save }}" method="post" data-oc-toggle="ajax">
+          <ul class="nav nav-tabs">
+            <li class="nav-item"><a href="#tab-general" data-bs-toggle="tab" class="nav-link active">{{ tab_general }}</a></li>
+            <li class="nav-item"><a href="#tab-message" data-bs-toggle="tab" class="nav-link">{{ tab_message }}</a></li>
+            <li class="nav-item"><a href="#tab-chartcolor" data-bs-toggle="tab" class="nav-link">{{ tab_chartcolor }}</a></li>
+          </ul>
+          <div class="tab-content">
+            <div class="tab-pane active" id="tab-general">
+            <div class="row mb-3">
+              <label class="col-sm-2 col-form-label">{{ entry_status }}</label>
+              <div class="col-sm-10">
+                <select id="module_mppollglobal_status" class="form-control" name="module_mppollglobal_status" >
+                  {% if module_mppollglobal_status %}
+                  <option value="1" selected="selected">{{ text_enabled }}</option>
+                  <option value="0">{{ text_disabled }}</option>
+                  {% else %}
+                  <option value="1">{{ text_enabled }}</option>
+                  <option value="0" selected="selected">{{ text_disabled }}</option>
+                  {% endif %}
+                </select>
+              </div>
+            </div>
+
+            <div class="row mb-3">
+              <label class="col-sm-2 col-form-label">{{ entry_store }}</label>
+              <div class="col-sm-10">
+                <select onchange="changeStore(this);" id="module_mppollglobal_store" class="form-control" name="module_mppollglobal_store" >
+                  <option value="0" {% if module_mppollglobal_store == '0' %}selected="selected"{% endif %}>{{ text_default }}</option>
+                  {% for store in stores %}
+                  <option value="{{ store.store_id }}" {% if module_mppollglobal_store == store.store_id %}selected="selected"{% endif %}>{{ store.name }}</option>
+                  {% endfor %}
+                </select>
+              </div>
+            </div>
+
+            <div class="row mb-3 required">
+              <label class="col-sm-2 col-form-label" for="input-cookie"><span data-bs-toggle="tooltip" title="{{ help_cookie }}">{{ entry_cookie }}</span></label>
+              <div class="col-sm-10">
+                <input type="text" name="module_mppollglobal_cookie" value="{{ module_mppollglobal_cookie }}" placeholder="{{ entry_cookie }}" id="input-cookie" class="form-control" />
+
+                <div id="error-cookie" class="invalid-feedback"></div>
+              </div>
+            </div>
+
+            <div class="row mb-3 required">
+              <label class="col-sm-2 col-form-label" for="input-chart"><span data-bs-toggle="tooltip" title="{{ help_chart }}">{{ entry_chart }}</span></label>
+              <div class="col-sm-5">
+                <label class="col-form-label" for="input-chartcatalog-w">{{ entry_chartadmin }} {{ entry_width }}</label>
+                <input type="text" name="module_mppollglobal_chartadmin_w" value="{{ module_mppollglobal_chartadmin_w }}" placeholder="{{ entry_width }}" id="input-chartadmin-w" class="form-control" />
+                <div id="error-chartadmin-w" class="invalid-feedback"></div>
+              </div>
+              <div class="col-sm-5">
+                <label class="col-form-label" for="input-chartcatalog-h">{{ entry_chartadmin }} {{ entry_height }}</label>
+                <input type="text" name="module_mppollglobal_chartadmin_h" value="{{ module_mppollglobal_chartadmin_h }}" placeholder="{{ entry_height }}" id="input-chartadmin-h" class="form-control" />
+                <div id="error-chartadmin-h" class="invalid-feedback"></div>
+              </div>
+            </div>
+            <div class="row mb-3 required">
+              <label class="col-sm-2 col-form-label" for="input-chart"><span data-bs-toggle="tooltip" title="{{ help_chart }}">{{ entry_chart }}</span></label>
+              <div class="col-sm-5">
+                <label class="col-form-label" for="input-chartcatalog-w">{{ entry_chartcatalog }} {{ entry_width }}</label>
+                <input type="text" name="module_mppollglobal_chartcatalog_w" value="{{ module_mppollglobal_chartcatalog_w }}" placeholder="{{ entry_width }}" id="input-chartcatalog-w" class="form-control" />
+                <div id="error-chartcatalog-w" class="invalid-feedback"></div>
+              </div>
+              <div class="col-sm-5">
+                <label class="col-form-label" for="input-chartcatalog-h">{{ entry_chartcatalog }} {{ entry_height }}</label>
+                <input type="text" name="module_mppollglobal_chartcatalog_h" value="{{ module_mppollglobal_chartcatalog_h }}" placeholder="{{ entry_height }}" id="input-chartcatalog-h" class="form-control" />
+                <div id="error-chartcatalog-h" class="invalid-feedback"></div>
+              </div>
+            </div>
+            <div class="row mb-3 required">
+              <label class="col-sm-2 col-form-label" for="input-display_result"><span data-bs-toggle="tooltip" title="{{ help_display_result }}">{{ entry_display_result }}</span></label>
+              <div class="col-sm-10">
+                <label class="radio-inline">
+                  <input type="radio" name="module_mppollglobal_display_result" value="0" {% if module_mppollglobal_display_result == '0' %}checked="checked"{% endif %} /> {{ text_hide_result }}
+                </label>
+                <label class="radio-inline">
+                  <input type="radio" name="module_mppollglobal_display_result" value="1" {% if module_mppollglobal_display_result == '1' %}checked="checked"{% endif %} /> {{ text_display_customer }}
+                </label>
+                <label class="radio-inline">
+                  <input type="radio" name="module_mppollglobal_display_result" value="2" {% if module_mppollglobal_display_result == '2' %}checked="checked"{% endif %} /> {{ text_display_both }}
+                </label>
+                <div id="error-display-result" class="invalid-feedback"></div>
+              </div>
+            </div>
+            </div>
+            <div class="tab-pane" id="tab-message">
+              <div class="row mb-3 required">
+                <label class="col-sm-2 col-form-label" for="input-notauthorizedmsg"><span data-bs-toggle="tooltip" title="{{ help_notauthorizedmsg }}">{{ entry_notauthorizedmsg }}</span></label>
+                <div class="col-sm-10">
+                  {% for language in languages %}
+                  <div class="input-group"><span class="input-group-text"><img src="{{ language.image }}" title="{{ language.name }}" /></span>
+                  <input type="text" name="module_mppollglobal_notauthorizedmsg[{{ language.language_id }}]" value="{{ (module_mppollglobal_notauthorizedmsg[ language.language_id ]) ? module_mppollglobal_notauthorizedmsg[ language.language_id ] : '' }}" placeholder="{{ entry_notauthorizedmsg }}" id="input-notauthorizedmsg-{{ language.language_id }}" class="form-control" />
+                  </div>
+                  <div id="error-notauthorizedmsg-{{ language.language_id }}" class="invalid-feedback"></div>
+                  {% endfor %}
+                </div>
+              </div>
+              <div class="row mb-3 required">
+                <label class="col-sm-2 col-form-label" for="input-errornoneselectmsg"><span data-bs-toggle="tooltip" title="{{ help_errornoneselectmsg }}">{{ entry_errornoneselectmsg }}</span></label>
+                <div class="col-sm-10">
+                  {% for language in languages %}
+                  <div class="input-group"><span class="input-group-text"><img src="{{ language.image }}" title="{{ language.name }}" /></span>
+                  <input type="text" name="module_mppollglobal_errornoneselectmsg[{{ language.language_id }}]" value="{{ (module_mppollglobal_errornoneselectmsg[ language.language_id ]) ? module_mppollglobal_errornoneselectmsg[ language.language_id ] : '' }}" placeholder="{{ entry_errornoneselectmsg }}" id="input-errornoneselectmsg-{{ language.language_id }}" class="form-control" />
+                  </div>
+                  <div id="error-errornoneselectmsg-{{ language.language_id }}" class="invalid-feedback"></div>
+                  {% endfor %}
+                </div>
+              </div>
+              <div class="row mb-3 required">
+                <label class="col-sm-2 col-form-label" for="input-successmsg"><span data-bs-toggle="tooltip" title="{{ help_successmsg }}">{{ entry_successmsg }}</span></label>
+                <div class="col-sm-10">
+                  {% for language in languages %}
+                  <div class="input-group"><span class="input-group-text"><img src="{{ language.image }}" title="{{ language.name }}" /></span>
+                  <input type="text" name="module_mppollglobal_successmsg[{{ language.language_id }}]" value="{{ (module_mppollglobal_successmsg[ language.language_id ]) ? module_mppollglobal_successmsg[ language.language_id ] : '' }}" placeholder="{{ entry_successmsg }}" id="input-successmsg-{{ language.language_id }}" class="form-control" />
+                  </div>
+                  <div id="error-successmsg-{{ language.language_id }}" class="invalid-feedback"></div>
+                  {% endfor %}
+                </div>
+              </div>
+              <div class="row mb-3 required">
+                <label class="col-sm-2 col-form-label" for="input-usesuccessmsg"><span data-bs-toggle="tooltip" title="{{ help_usesuccessmsg }}">{{ entry_usesuccessmsg }}</span></label>
+                <div class="col-sm-10">
+                  <label class="radio-inline">
+                      {% if module_mppollglobal_usesuccessmsg %}
+                      <input type="radio" name="module_mppollglobal_usesuccessmsg" value="1" checked="checked" />
+                      {{ text_yes }}
+                      {% else %}
+                      <input type="radio" name="module_mppollglobal_usesuccessmsg" value="1" />
+                      {{ text_yes }}
+                      {% endif %}
+                    </label>
+                    <label class="radio-inline">
+                      {% if not module_mppollglobal_usesuccessmsg %}
+                      <input type="radio" name="module_mppollglobal_usesuccessmsg" value="0" checked="checked" />
+                      {{ text_no }}
+                      {% else %}
+                      <input type="radio" name="module_mppollglobal_usesuccessmsg" value="0" />
+                      {{ text_no }}
+                      {% endif %}
+                    </label>
+                </div>
+              </div>
+            </div>
+            <div class="tab-pane" id="tab-chartcolor">
+              <div class="row mb-3 required">
+                <label class="col-sm-2 col-form-label" for="input-usecolor"><span data-bs-toggle="tooltip" title="{{ help_usecolor }}">{{ entry_usecolor }}</span></label>
+                <div class="col-sm-10">
+                  <label class="radio-inline">
+                    {% if module_mppollglobal_usecolor %}
+                    <input type="radio" name="module_mppollglobal_usecolor" value="1" checked="checked" />
+                    {{ text_yes }}
+                    {% else %}
+                    <input type="radio" name="module_mppollglobal_usecolor" value="1" />
+                    {{ text_yes }}
+                    {% endif %}
+                  </label>
+                  <label class="radio-inline">
+                    {% if not module_mppollglobal_usecolor %}
+                    <input type="radio" name="module_mppollglobal_usecolor" value="0" checked="checked" />
+                    {{ text_no }}
+                    {% else %}
+                    <input type="radio" name="module_mppollglobal_usecolor" value="0" />
+                    {{ text_no }}
+                    {% endif %}
+                  </label>
+                  <div id="error-usecolor" class="invalid-feedback"></div>
+                </div>
+              </div>
+              <div class="table-responsive">
+                <table id="chartcolors" class="table table-striped table-bordered table-hover">
+                  <thead>
+                    <tr>
+                      <td class="text-left"><span data-bs-toggle="tooltip" title="{{ help_chartcolor }}">{{ entry_chartcolor }}</span></td>
+                      <td class="text-right">{{ entry_answer_no }}</td>
+                      <td>&nbsp;</td>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  {% set chartcolor_row = 0 %}
+                  {% for module_mppollglobal_chartcolor in module_mppollglobal_chartcolors %}
+                  <tr id="chartcolor-row{{ chartcolor_row }}">
+                    <td class="text-right">
+                      <table class="table">
+                        <tr>
+                          <td><input type="text" name="module_mppollglobal_chartcolors[{{ chartcolor_row }}][chartcolor]" value="{{ module_mppollglobal_chartcolor.chartcolor }}" placeholder="{{ entry_chartcolor }}" class="form-control colorpickers" /></td>
+                          <td><div class="preview"></div></td>
+                        </tr>
+                      </table>
+                    </td>
+                    <td class="text-right">
+                      <input type="text" name="module_mppollglobal_chartcolors[{{ chartcolor_row }}][answer_no]" value="{{ module_mppollglobal_chartcolor.answer_no }}" placeholder="{{ entry_answer_no }}" class="form-control" />
+                    </td>
+                    <td class="text-left"><button type="button" onclick="$('#chartcolor-row{{ chartcolor_row }}').remove();" data-bs-toggle="tooltip" title="{{ button_remove }}" class="btn btn-danger"><i class="fa fa-minus-circle"></i></button></td>
+                  </tr>
+                  {% set chartcolor_row = chartcolor_row + 1 %}
+                  {% endfor %}
+                  </tbody>
+                  <tfoot>
+                    <tr>
+                      <td colspan="2"></td>
+                      <td class="text-left"><button type="button" onclick="addChartColor();" data-bs-toggle="tooltip" title="{{ button_chartcolor_add }}" class="btn btn-primary"><i class="fa fa-plus-circle"></i></button></td>
+                    </tr>
+                  </tfoot>
+                </table>
+              </div>
+            </div>
+          </div>
+      </form>
+    </div>
+  </div>
+</div>
+<style>
+  .preview { width: 60px; height: 35px; background: #fff; border: 1px solid #dddddd; padding: 3px; }
+</style>
+<script type="text/javascript"><!--
+function changeStore(me) {
+  window.location = "{{ action }}&store_id="+ encodeURIComponent($(me).value());
+}
+
+var chartcolor_row = {{ chartcolor_row }};
+
+function addChartColor() {
+  html  = '<tr id="chartcolor-row' + chartcolor_row + '">';
+  html += '  <td class="text-right table-responsive">';
+  html += '<table class="table"><tr><td><input type="text" name="module_mppollglobal_chartcolors[' + chartcolor_row + '][chartcolor]" value="" placeholder="{{ entry_chartcolor }}" class="form-control colorpickers" /> </td><td><div class="preview"></div></td></tr></table>';
+  html += '</td>';
+
+  html += '  <td class="text-right">';
+  html += '<input type="text" name="module_mppollglobal_chartcolors[' + chartcolor_row + '][answer_no]" value="0" placeholder="{{ entry_answer_no }}" class="form-control" />';
+  html += '</td>';
+  
+  html += '  <td class="text-left"><button type="button" onclick="$(\'#chartcolor-row' + chartcolor_row  + '\').remove();" data-bs-toggle="tooltip" title="{{ button_remove }}" class="btn btn-danger"><i class="fa fa-minus-circle"></i></button></td>';
+  html += '</tr>';
+
+  $('#chartcolors > tbody').append(html);
+
+  chartcolor_row++;
+  stColorPicker('.colorpickers');
+}
+
+function stColorPicker(el) {
+  var thiscol = null;
+  $(el).ColorPicker({
+    curr : '',
+    onShow: function (colpkr) {
+      $(colpkr).fadeIn(500);
+      return false;
+    },
+    onHide: function (colpkr) {
+      $(colpkr).fadeOut(500);
+    return false;
+    },
+    onSubmit: function(hsb, hex, rgb, el) {
+      $(el).val(hex);
+      $(el).ColorPickerHide();
+    },
+    onBeforeShow: function () {
+      $(this).ColorPickerSetColor(this.value);
+    },
+    onChange: function (hsb, hex, rgb) {
+      thiscol.curr.parent().next().children('.preview').css('background', '#' + hex);
+      thiscol.curr.val(hex);
+    }
+  }).bind('keyup', function(){
+    $(this).ColorPickerSetColor(this.value);
+  }).click(function(){
+    thiscol = this;
+    thiscol.curr = $(this);
+  });
+}
+
+$(function() {
+  stColorPicker('.colorpickers');
+  $.each($('.colorpickers'),function(key,value){
+    $(this).parent().next().children('.preview').css({'background':'#'+$(this).val()});
+  });
+});
+//--></script>
+</div>
+{{ footer }}

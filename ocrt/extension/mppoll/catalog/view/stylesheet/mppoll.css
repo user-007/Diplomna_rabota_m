@@ -1,0 +1,25 @@
+.mppoll-module{
+	border:1px solid #ddd;
+}
+.mppoll-module .progress-bar{
+	color:#666;
+}
+.mppoll-module .module_head h3{
+	margin-top: 0;
+	font-size: 18px;
+	border-bottom: 1px solid #ddd;
+	padding: 8px 15px;
+	background: #ddd;
+}
+.mppoll-module .my-mppolls h3{
+	margin-top: 0;
+	font-size: 15px;
+}
+.mppoll-module .progress{
+	margin-bottom: 0;
+}
+.mppoll-module .my-mppolls .alert{
+	padding: 8px 5px 8px 5px;
+	font-size: 11px;
+	text-align: center;
+}

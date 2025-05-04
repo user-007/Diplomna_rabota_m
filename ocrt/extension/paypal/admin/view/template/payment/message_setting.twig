@@ -1,0 +1,131 @@
+{{ header }}{{ column_left }}
+<div id="content" class="payment-paypal">
+	<div class="page-header">
+		<div class="container-fluid">
+			<div class="float-end">
+				<button type="submit" form="form_payment" data-bs-toggle="tooltip" title="{{ button_save }}" class="btn btn-primary button-save"><i class="fas fa-save"></i></button>
+				<a href="{{ back }}" data-bs-toggle="tooltip" title="{{ button_back }}" class="btn btn-light"><i class="fas fa-reply"></i></a>
+			</div>
+			<h1>{{ heading_title_main }}</h1>
+			<ul class="breadcrumb">
+				{% for breadcrumb in breadcrumbs %}
+				<li class="breadcrumb-item"><a href="{{ breadcrumb['href'] }}">{{ breadcrumb['text'] }}</a></li>
+				{% endfor %}
+			</ul>
+		</div>
+	</div>
+	<div class="container-fluid">
+		{% if error_warning %}
+		<div class="alert alert-danger"><i class="fas fa-exclamation-circle"></i> {{ error_warning }}</div>
+		{% endif %}
+		{% if text_version %}
+		<div class="alert alert-info"><i class="fas fa-info-circle"></i> {{ text_version }}</div>
+		{% endif %}
+		<div class="card">
+			<div class="card-header"><i class="fas fa-pencil-alt"></i> {{ text_edit }}</div>
+			<div class="card-body">
+				<form action="{{ save }}" method="post" id="form_payment" data-oc-toggle="ajax">
+					<a href="{{ href_dashboard }}" class="back-dashboard"><i class="icon icon-back-dashboard"></i>{{ text_tab_dashboard }}</a>
+					<ul class="nav nav-tabs">
+						<li class="nav-tab"><a href="{{ href_general }}" class="tab"><i class="tab-icon tab-icon-general"></i><span class="tab-title">{{ text_tab_general }}</span></a></li>
+						<li class="nav-tab"><a href="{{ href_button }}" class="tab"><i class="tab-icon tab-icon-button"></i><span class="tab-title">{{ text_tab_button }}</span></a></li>
+						<li class="nav-tab"><a href="{{ href_googlepay_button }}" class="tab"><i class="tab-icon tab-icon-googlepay-button"></i><span class="tab-title">{{ text_tab_googlepay_button }}</span></a></li>
+						<li class="nav-tab"><a href="{{ href_applepay_button }}" class="tab"><i class="tab-icon tab-icon-applepay-button"></i><span class="tab-title">{{ text_tab_applepay_button }}</span></a></li>
+						<li class="nav-tab"><a href="{{ href_card }}" class="tab"><i class="tab-icon tab-icon-card"></i><span class="tab-title">{{ text_tab_card }}</span></a></li>
+						<li class="nav-tab"><a href="{{ href_fastlane }}" class="tab"><i class="tab-icon tab-icon-fastlane"></i><span class="tab-title">{{ text_tab_fastlane }}</span></a></li>
+						<li class="nav-tab"><a href="{{ href_message_configurator }}" class="tab"><i class="tab-icon tab-icon-message-configurator"></i><span class="tab-title">{{ text_tab_message_configurator }}</span></a></li>
+						<li class="nav-tab active"><a href="{{ href_message_setting }}" class="tab active"><i class="tab-icon tab-icon-message-setting"></i><span class="tab-title">{{ text_tab_message_setting }}</span></a></li>
+						<li class="nav-tab"><a href="{{ href_order_status }}" class="tab"><i class="tab-icon tab-icon-order-status"></i><span class="tab-title">{{ text_tab_order_status }}</span></a></li>
+						<li class="nav-tab"><a href="{{ href_contact }}" class="tab"><i class="tab-icon tab-icon-contact"></i><span class="tab-title">{{ text_tab_contact }}</span></a></li>
+					</ul>
+					<div class="section-content">
+						<ul class="nav nav-pills">
+							{% for message in setting['message'] %}
+							{% if (message['page_code'] != 'checkout') %}
+							<li class="nav-pill"><a href="#pill_{{ message['page_code'] }}" class="pill {% if (message['page_code'] == 'cart') %} active {% endif %}" data-bs-toggle="tab">{{ attribute(_context, message['page_name']) }}</a></li>
+							{% endif %}
+							{% endfor %}
+						</ul>
+						<hr class="hr" />
+						<div class="tab-content">
+							{% for message in setting['message'] %}
+							{% if (message['page_code'] != 'checkout') %}
+							<div id="pill_{{ message['page_code'] }}" class="tab-pane {% if (message['page_code'] == 'cart') %} active {% endif %}">
+								<div class="section-message-setting">
+									<div class="row">
+										<div class="col col-md-6">
+											<legend class="legend">{{ text_message_settings }}</legend>
+										</div>
+									</div>
+									{% if text_message_alert %}
+									{#<div class="row mb-3">
+										<div class="col col-md-12">
+											<p class="alert alert-info">{{ text_message_alert }}</p>
+										</div>
+									</div>
+									<div class="row mb-3">
+										<div class="col col-md-12">
+											<p class="footnote">{{ text_message_footnote }}</p>
+										</div>
+									</div>#}
+									{% endif %}
+									<div class="row">
+										<div class="col col-md-6">
+											<div class="row mb-3">
+												<label class="col-form-label" for="input_message_{{ message['page_code'] }}_insert_tag">{{ entry_message_insert_tag }}</label>
+												<div class="input-group">
+													<input type="text" name="payment_paypal_setting[message][{{ message['page_code'] }}][insert_tag]" value="{{ message['insert_tag'] }}" id="input_message_{{ message['page_code'] }}_insert_tag" class="form-control" />
+												</div>
+											</div>
+										</div>
+										<div class="col col-md-6">
+											<div class="row mb-3">
+												<label class="col-form-label" for="input_message_{{ message['page_code'] }}_insert_type">{{ entry_message_insert_type }}</label>
+												<div class="input-group">
+													<select name="payment_paypal_setting[message][{{ message['page_code'] }}][insert_type]" id="input_message_{{ message['page_code'] }}_insert_type" class="form-select">
+														{% for message_insert_type in setting['message_insert_type'] %}
+														{% if (message_insert_type['code'] == message['insert_type']) %}
+														<option value="{{ message_insert_type['code'] }}" selected="selected">{{ attribute(_context, message_insert_type['name']) }}</option>
+														{% else %}
+														<option value="{{ message_insert_type['code'] }}">{{ attribute(_context, message_insert_type['name']) }}</option>
+														{% endif %}
+														{% endfor %}
+													</select>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							{% endif %}
+							{% endfor %}
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+
+$('.payment-paypal').on('click', '.button-agree', function() {
+	$.ajax({
+		type: 'post',
+		url: '{{ agree_url }}',
+		data: '',
+		dataType: 'json',
+		success: function(json) {
+			$('.payment-paypal .alert').remove();
+			
+			if (json['success']) {
+				$('#alert').prepend('<div class="alert alert-success alert-dismissible"><i class="fas fa-check-circle"></i> ' + json['success'] + ' <button type="button" class="btn-close" data-bs-dismiss="alert"></button></div>');
+			}
+		},
+		error: function(xhr, ajaxOptions, thrownError) {
+			console.log(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+		}
+	});
+});
+
+</script>
+{{ footer }}

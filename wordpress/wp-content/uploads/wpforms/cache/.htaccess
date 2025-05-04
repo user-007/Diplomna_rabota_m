@@ -1,0 +1,16 @@
+
+# BEGIN WPForms
+# Директивите (редовете) между "BEGIN WPForms" и "END WPForms" са
+# динамично генерирани и трябва да се променят само чрез филтрите на WordPress.
+# Всяка промяна на директивите между тези маркери ще бъде заличена.
+# Disable access for any file in the cache dir.
+# Apache 2.2
+<IfModule !authz_core_module>
+	Deny from all
+</IfModule>
+
+# Apache 2.4+
+<IfModule authz_core_module>
+	Require all denied
+</IfModule>
+# END WPForms

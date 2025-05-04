@@ -1,0 +1,194 @@
+.wps-content-analytics {
+  .wps-card {
+    .wps-content-category {
+      margin-bottom: 0 !important;
+    }
+
+  }
+
+  #performance-chart, #performance-chart-single {
+    height: 299px !important;
+    width: 100% !important;
+    margin-top: 24px;
+  }
+
+
+  td .wps-ellipsis-parent {
+    max-width: 250px;
+  }
+
+  .wps-ellipsis-parent {
+    display: table;
+    table-layout: fixed;
+    width: 100%;
+
+    .wps-ellipsis-text {
+      display: table-cell;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
+  }
+
+  &-header {
+    display: flex;
+    gap: 12px;
+    margin-top: -10px;
+
+    &__title {
+      h2 {
+        font-size: 15px;
+        font-weight: 500;
+        line-height: 17.58px;
+        color: #0C0C0D;
+      }
+
+      a {
+        margin-left: 6px;
+
+        .rtl & {
+          margin-left: 0;
+          margin-right: 6px;
+        }
+
+        &:after {
+          content: '';
+          width: 15px;
+          height: 15px;
+          background: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUiIGhlaWdodD0iMTUiIHZpZXdCb3g9IjAgMCAxNSAxNSIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTYuMjUgMi41SDMuNzVDMy4wNTk2NCAyLjUgMi41IDMuMDU5NjQgMi41IDMuNzVWMTEuMjVDMi41IDExLjk0MDQgMy4wNTk2NCAxMi41IDMuNzUgMTIuNUgxMS4yNUMxMS45NDA0IDEyLjUgMTIuNSAxMS45NDA0IDEyLjUgMTEuMjVWOC43NU02Ljg3NSA4LjEyNUwxMi41IDIuNU0xMi41IDIuNVY1LjYyNU0xMi41IDIuNUg5LjM3NSIgc3Ryb2tlPSIjNDA0QkYyIiBzdHJva2Utd2lkdGg9IjEuNSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+Cjwvc3ZnPgo=") center center no-repeat;
+          display: inline-block;
+          margin-bottom: -2px;
+
+          .rtl & {
+            transform: rotateZ(270deg);
+          }
+        }
+      }
+    }
+
+    img, div > svg {
+      width: 54px;
+      height: 54px;
+      border-radius: 520px;
+      box-sizing: border-box;
+    }
+
+    img {
+      border: 1px solid #D9DBFC;
+    }
+
+    &__info {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+      margin-bottom: 10px;
+      margin-top: 10px;
+      flex-wrap: wrap;
+
+      .wps-content-analytics-header__type {
+        padding: 2px 8px;
+        border-radius: 2px;
+        font-size: 13px;
+        font-weight: 500;
+        line-height: 15.23px;
+
+        &--post {
+          background: #1961401A;
+          color: #196140;
+        }
+
+        &--page {
+          background: #A2298C1A;
+          color: #A2298C;
+        }
+
+        &--custom {
+          background: #E28D171A;
+          color: #E28D17;
+        }
+      }
+
+      .wps-content-analytics-header__date {
+        &_published, &_updated {
+          font-size: 13px;
+          font-weight: 400;
+          line-height: 15.23px;
+          color: #0C0C0D;
+        }
+
+        &_updated span {
+          color: #56585A
+        }
+
+      }
+
+      .wps-content-analytics-header__author {
+        font-size: 13px;
+        font-weight: 400;
+        line-height: 15.23px;
+
+        span {
+          color: #56585A
+        }
+
+        a {
+          font-size: 13px;
+          font-weight: 400;
+          line-height: 15.23px;
+          color: #0C0C0D;
+          text-decoration: underline;
+          word-break: break-word;
+
+          &:hover {
+            color: #404bf2;
+          }
+        }
+
+      }
+    }
+
+    &__tags {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      flex-wrap: wrap;
+
+      a {
+        padding: 4px 8px;
+        background: #56585A1A;
+        border-radius: 4px;
+        color: #56585A;
+        font-size: 12px;
+        line-height: 14.06px;
+        font-weight: 400;
+        word-break: break-word;
+        cursor: pointer;
+
+        &.extra-item {
+          display: none;
+          &.show{
+            display: inline-block;
+          }
+        }
+
+        &:hover {
+          color: #56585A;
+          background: #56585a33;
+        }
+
+        &.wps-content-analytics-header__tags--more {
+          background: transparent;
+          color: #56585A;
+          text-decoration: underline;
+          font-size: 12px;
+          font-weight: 400;
+          line-height: 14.06px;
+
+          &:hover {
+            color: #0C0C0D;
+          }
+        }
+      }
+    }
+  }
+}

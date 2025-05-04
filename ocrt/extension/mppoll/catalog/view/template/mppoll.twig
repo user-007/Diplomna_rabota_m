@@ -1,0 +1,106 @@
+{{ header }}
+<div class="container">
+  <ul class="breadcrumb">
+    {% for breadcrumb in breadcrumbs %}
+    <li class="breadcrumb-item"><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+    {% endfor %}
+  </ul>
+  <div class="row">{{ column_left }}
+    {% if column_left and column_right %}
+    {%  set class = 'col-sm-6' %}
+    {% elseif column_left or column_right %}
+    {%  set class = 'col-sm-9' %}
+    {% else %}
+    {%  set class = 'col-sm-12' %}
+    {% endif %}
+
+    <div id="content" class="{{ class }}">{{ content_top }}
+
+      <div id="mppoll_id" data-id="{{ mppoll_id }}"></div>
+      <div class="row mb-3">
+        <div class="col-md-12">
+        {% if display_result %}
+          {% if mppolls %}
+          <ul class="list-group" id="mppolls">
+            <li class="list-group-item list-group-heading">
+              <div class="row">
+                <div class="col-sm-4 text-start">{{ column_question }}</div>
+                <div class="col-sm-4 text-start">{{ column_total_votes }}</div>
+                <div class="col-sm-4 text-end">{{ column_action }}</div>
+              </div>
+            </li>
+            <li class="list-group-item">
+              {% for mppoll in mppolls %}
+              <div class="row mb-3" id="mppoll-{{ mppoll.mppoll_id }}">
+                <div class="col-sm-4 text-start">{{ mppoll.question }}</div>
+                <div class="col-sm-4 text-start">{{ text_total_votes }} {{ mppoll.responses }}</div>
+                <div class="col-sm-4 text-end"><button data-error='{{ error_invalid_url }}' type="button" data-id="{{ mppoll.mppoll_id }}" class="btn btn-primary voteresults" onclick="MPPOLL.Seevoteresult(this);">{{ text_poll_results }}</button></div>
+              </div>
+              {% if not loop.last %}
+                <hr/>
+              {% endif %}
+              {% endfor %}
+            </li>
+          </ul>
+          {% else %}
+          <div id="mppoll" class="text-center">
+            <h2>{{ text_empty }}</h2>
+          </div>
+          {% endif %}
+        {% else %}
+          <div id="mppoll" class="text-center">
+            <h2>{{ const_notauthorizedmsg }}</h2>
+          </div>
+        {% endif %}
+        </div>
+      </div>
+      <div class="mb-3 text-end">
+        <a href="{{ continue }}" class="btn btn-primary">{{ button_continue }}</a>
+      </div>
+      {{ content_bottom }}</div>
+    {{ column_right }}</div>
+
+{% if display_result %}
+{# float start #}
+
+<style type="text/css">
+  .chart-container {
+    box-sizing: border-box;
+    /*width: 850px;*/
+    height: 450px;
+    padding: 20px 15px 15px 15px;
+    /*margin: 15px auto 30px auto;*/
+    border: 1px solid #ddd;
+    background: #fff;
+    background: linear-gradient(#f6f6f6 0, #fff 50px);
+    background: -o-linear-gradient(#f6f6f6 0, #fff 50px);
+    background: -ms-linear-gradient(#f6f6f6 0, #fff 50px);
+    background: -moz-linear-gradient(#f6f6f6 0, #fff 50px);
+    background: -webkit-linear-gradient(#f6f6f6 0, #fff 50px);
+    box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+    -o-box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    -ms-box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    -moz-box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    -webkit-box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+
+    position: relative;
+    height: 400px;
+  }
+
+  .chart-holder {
+    width: 770px;
+    height: 300px;
+    font-size: 14px;
+    line-height: 1.2em;
+  }
+
+</style>
+
+<!--[if lte IE 8]><script language="javascript" type="text/javascript" src="{{ constant('HTTP_SERVER') }}extension/mppoll/catalog/view/javascript/flot/excanvas.min.js"></script><![endif]-->
+<script language="javascript" type="text/javascript" src="{{ constant('HTTP_SERVER') }}extension/mppoll/catalog/view/javascript/flot/jquery.flot.min.js"></script>
+<script language="javascript" type="text/javascript" src="{{ constant('HTTP_SERVER') }}extension/mppoll/catalog/view/javascript/flot/jquery.flot.pie.min.js"></script>
+
+{# float end #}
+  {% endif %}
+</div>
+{{ footer }}
